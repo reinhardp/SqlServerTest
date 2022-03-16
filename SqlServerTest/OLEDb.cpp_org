@@ -1,0 +1,691 @@
+#include "OLEDb.h"
+#include "includes.h"
+#include <tchar.h>
+#include <strsafe.h>
+#include <userenv.h>
+#include <wtypes.h>
+#include <Objbase.h>
+#include <oledb.h>
+#include <msoledbsql.h>
+//#include <msdadc.h>   // for IDataConvert  
+//#include <msdaguid.h>   // for IDataConvert  
+
+
+#define DBINITCONSTANTS  
+#define INITGUID  
+
+
+
+OLEDb::~OLEDb() {
+/*
+    if (m_colvalues)
+        delete[] m_colvalues;
+*/
+}
+
+
+/*
+ * 
+*/
+int OLEDb::connect(void) {
+    ULONG i;
+    HRESULT hr = E_FAIL;
+    IDBProperties* pIDBProperties = NULL;
+    DBPROP InitProperties[5];
+    DBPROPSET rgInitPropSet[1];
+
+    hr = CoInitialize(NULL);
+    //hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+
+    bool x = (hr == RPC_E_CHANGED_MODE);
+    x = (hr == S_FALSE);
+    if (hr != S_OK) {
+        if (hr == RPC_E_CHANGED_MODE) {
+            MessageBox(NULL, L"CoInitialize failed with RPC_E_CHANGED_MODE!", L"CoInitialize", MB_OK | MB_ICONERROR);
+        }
+        CoUninitialize();
+        MessageBox(NULL, L"CoInitialize failed", L"CoInitialize", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+    hr = CoCreateInstance(CLSID_MSOLEDBSQL,
+        NULL,
+        CLSCTX_INPROC_SERVER,
+        IID_IDBInitialize,
+        (void**)&m_pIDBInitialize);
+    if (FAILED(hr)) {
+        MessageBox(NULL, L"CoCreateInstance failed", L"CoCreateInstance", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+    // Initialize the property values needed to establish the connection.  
+    for (i = 0; i < 5; i++)
+        VariantInit(&InitProperties[i].vValue);
+
+    InitProperties[0].dwPropertyID = DBPROP_INIT_DATASOURCE;
+    InitProperties[0].vValue.vt = VT_BSTR;
+
+    InitProperties[0].vValue.bstrVal = SysAllocString(m_host);
+    InitProperties[0].dwOptions = DBPROPOPTIONS_REQUIRED;
+    InitProperties[0].colid = DB_NULLID;
+
+    // Database.  
+    InitProperties[1].dwPropertyID = DBPROP_INIT_CATALOG;
+    InitProperties[1].vValue.vt = VT_BSTR;
+    InitProperties[1].vValue.bstrVal = SysAllocString(m_dbName);
+    InitProperties[1].dwOptions = DBPROPOPTIONS_REQUIRED;
+    InitProperties[1].colid = DB_NULLID;
+    
+    InitProperties[2].dwPropertyID = DBPROP_AUTH_USERID;
+    InitProperties[2].vValue.vt = VT_BSTR;
+    InitProperties[2].vValue.bstrVal = SysAllocString(m_user);
+    InitProperties[2].dwOptions = DBPROPOPTIONS_REQUIRED;
+    InitProperties[2].colid = DB_NULLID;
+
+    InitProperties[3].dwPropertyID = DBPROP_AUTH_PASSWORD;
+    InitProperties[3].vValue.vt = VT_BSTR;
+    InitProperties[3].vValue.bstrVal = SysAllocString(m_pwd);
+    InitProperties[3].dwOptions = DBPROPOPTIONS_REQUIRED;
+    InitProperties[3].colid = DB_NULLID;
+
+    // Properties are set, now construct the DBPROPSET structure (rgInitPropSet) used to pass   
+   // an array of DBPROP structures (InitProperties) to the SetProperties method.  
+    rgInitPropSet[0].guidPropertySet = DBPROPSET_DBINIT;
+    rgInitPropSet[0].cProperties = 4;
+    rgInitPropSet[0].rgProperties = InitProperties;
+
+    hr = m_pIDBInitialize->QueryInterface(IID_IDBProperties, (void**)&pIDBProperties);
+    if (FAILED(hr)) {
+        MessageBox(NULL, L"Failed to get IDBProperties interface", L"QueryInterface", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+    hr = pIDBProperties->SetProperties(1, rgInitPropSet);
+    if (FAILED(hr)) {
+        // Handle errors here.  
+        MessageBox(NULL, L"Failed to set initialization properties.", L"SetProperties", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+    pIDBProperties->Release();
+
+    // Now establish the connection to the data source.  
+    if (FAILED(m_pIDBInitialize->Initialize())) {
+        // Handle errors here.  
+        MessageBox(NULL, L"IProblem in establishing connection to the data source", L"Initialize", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+    return 0;
+}
+
+
+
+void OLEDb::relaese(void) {
+    if(m_pIDBCreateCommand != NULL)
+        m_pIDBCreateCommand->Release();
+    
+    if(m_pIDBCreateSession != NULL)
+        m_pIDBCreateSession->Release();
+    
+    if (FAILED(m_pIDBInitialize->Uninitialize())) {
+        // Uninitialize is not required, but it fails if an interface  
+        // has not been released.  This can be used for debugging.
+    }
+    if(m_pIDBInitialize != NULL)
+        m_pIDBInitialize->Release();
+    
+    CoUninitialize();
+
+}
+
+
+int OLEDb::getRow(LPDATA data, int rowNumber = 0) {
+    
+
+    WCHAR format[255] = L"SELECT  id, firstname, lastname, birthday, dtext, created_by, created_at FROM %s.dbo.%s ORDER BY id OFFSET %d ROWS FETCH FIRST 1 ROWS ONLY";
+    StringCchPrintf(m_SQLString, 1024, format, m_dbName, m_table, rowNumber);
+    m_getallRows = true;
+    int rc = getdata(ISROW);
+    
+    return rc; 
+}
+
+int OLEDb::getNumberofRows(void) {
+
+    WCHAR format[255] = L"SELECT Count(id) as number FROM %s.dbo.%s";
+    StringCchPrintf(m_SQLString, 1024, format, m_dbName, m_table);
+    m_getallRows = false;
+    int numberofRows = getdata(ISROW);
+
+    return numberofRows;
+
+}
+
+int OLEDb::getNumberofColumns(void) {
+
+    WCHAR format[255] = L"SELECT Count(*) as number FROM INFORMATION_SCHEMA.Columns where TABLE_NAME = '%s'";
+    StringCchPrintf(m_SQLString, 1024, format, m_table);
+    m_getallRows = false;
+    int numberofColumns = getdata(ISROW);
+    m_numberOfColumns = numberofColumns;
+    return numberofColumns;
+}
+
+/*
+ * get all rows stored in DB
+*/
+int OLEDb::getAll(LPDATA data) {
+//int OLEDb::getAll(void* data) {
+
+    
+    WCHAR format[1024] = L"SELECT id, firstname, lastname, birthday, dtext, created_by, created_at FROM %s.dbo.%s ORDER BY id";
+    
+    StringCchPrintf(m_SQLString, 1024, format, m_dbName, m_table);
+    m_getallRows = true;
+    int rc = getdata(ISROWSET);
+    if (rc > 0)
+        return rc;
+    return -1;
+}
+
+
+/*
+ * get the last ID from the database
+*/
+unsigned int OLEDb::getLastID(void) {
+
+    WCHAR format[255] = L"SELECT TOP(1) id FROM %s.dbo.%s ORDER BY id DESC";
+    StringCchPrintf(m_SQLString, 255, format, m_dbName, m_table);
+    m_getallRows = false;
+    int rc = getdata(ISROW);
+    if (rc > 0)
+        return rc;
+    
+    return 0;
+}
+
+
+/*
+*/
+bool OLEDb::getFirstRow(void) {
+    m_currentRow = 1;
+    WCHAR format[255] = L"SELECT TOP (1) id, firstname, lastname, birthday, dtext, created_by, crated_at FROM %s.dbo.%s ORDER BY id";
+    m_getallRows = false;
+    StringCchPrintf(m_SQLString, 255, format, m_dbName, m_table);
+
+    return true;
+}
+
+/*
+*/
+bool OLEDb::getNextRow(void) {
+    WCHAR format[255] = L"SELECT id, firstname, lastname, birthday, dtext, created_by, crated_at FROM %s.dbo.%s ORDER BY id OFFSET (%d) ROWS FETCH NEXT (1) ROWS ONLY";	// ??
+    m_getallRows = false;
+    m_currentRow += 1;
+    return true;
+}
+
+
+
+bool OLEDb::disconnect(void) {
+
+    CoUninitialize();
+    return true;
+}
+
+int OLEDb::getdata(int flag) {
+    ICommandText*       pICommandText = NULL;
+    HRESULT             hr = E_FAIL;
+    IDBCreateSession*   pIDBCreateSession;
+    IRowset*            pIRowset = NULL;
+    
+    DBROWCOUNT          cNumRows = 0;
+   
+    int                 id = 0;
+
+    // Access the ICommandText interface.    
+   // Create a session object.  
+    hr = m_pIDBInitialize->QueryInterface(IID_IDBCreateSession, (void**)&pIDBCreateSession);
+    if (hr != S_OK) {
+        // Handle error.  
+        MessageBox(NULL, L"Failed to get IDBProperties interface.", L"QueryInterface", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+    hr = pIDBCreateSession->CreateSession(NULL,
+        IID_IDBCreateCommand,
+        (IUnknown**)&m_pIDBCreateCommand);
+    if (hr != S_OK) {
+        // Handle error.  
+        MessageBox(NULL, L"pIDBCreateSession->CreateSession failed.", L"CreateSession", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+    hr = m_pIDBCreateCommand->CreateCommand(NULL,
+        IID_ICommandText,
+        (IUnknown**)&pICommandText);
+    if(hr != S_OK) {
+        // Handle error.
+        m_pIDBCreateCommand->Release();
+        MessageBox(NULL, L"Failed to access ICommand interface.", L"CreateCommand", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+    m_pIDBCreateCommand->Release();
+
+    // Use SetCommandText() to specify the command text.  
+    hr = pICommandText->SetCommandText(DBGUID_DEFAULT, (OLECHAR*)m_SQLString);
+    if (hr != S_OK) {
+        // Handle error.  
+        pICommandText->Release();
+        MessageBox(NULL, L"Failed to set command text.", L"SetCommandText", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
+
+    // Execute the command.  
+    if (flag == ISROWSET) {
+        hr = pICommandText->Execute(NULL,
+            IID_IRowset,
+            NULL,
+            &cNumRows,
+            (IUnknown**)&pIRowset);
+
+        if (hr != S_OK) {
+            if (hr == E_FAIL)
+                MessageBox(NULL, L"Failed to execute command. E_FAIL", L"ICommandText::Execute", MB_OK | MB_ICONERROR);
+
+            if (hr == E_INVALIDARG)
+                MessageBox(NULL, L"Failed to execute command. E_INVALIDARG", L"ICommandText::Execute", MB_OK | MB_ICONERROR);
+
+            if (hr == E_NOINTERFACE)
+                MessageBox(NULL, L"Failed to execute command. E_NOINTERFACE", L"ICommandText::Execute", MB_OK | MB_ICONERROR);
+
+            // Handle error.
+            MessageBox(NULL, L"Failed to execute command for row set.", L"ICommandText::Execute", MB_OK | MB_ICONERROR);
+            //geterror(hr);
+            pICommandText->Release();
+            return -1;
+        }
+
+    }
+    if (flag == ISROW)
+    {
+        
+        hr = pICommandText->Execute(NULL,
+            IID_IRow,
+            NULL,
+            &cNumRows,
+            (IUnknown**)&m_piRow);
+
+        if (hr != S_OK) {
+            if(pICommandText)
+                pICommandText->Release();
+
+            MessageBox(NULL, L"Failed to execute command for row!", L"ICommandText::Execute", MB_OK | MB_ICONERROR);
+            return -1;
+        }
+
+        if (m_getallRows == false) {
+            
+            hr = GetColumn(m_piRow, 1, 1, &id);
+            if (FAILED(hr)) {
+                if (pICommandText)
+                    pICommandText->Release();
+
+                if (m_piRow)
+                    m_piRow->Release();
+                MessageBox(NULL, L"Failed to get Column!", L"GetColumn", MB_OK | MB_ICONERROR);
+
+                return -1;
+            }
+
+            return id;
+
+        }
+        else { // get all columns
+            
+            hr = GetColumns(m_piRow, m_numberOfColumns); // in cols ist nichts!!!!
+            if (FAILED(hr)) {
+
+                MessageBox(NULL, L"Failed to get Column!", L"GetColumn", MB_OK | MB_ICONERROR);
+
+                if (pICommandText)
+                    pICommandText->Release();
+
+                if (m_piRow)
+                    m_piRow->Release();
+
+                return -1;
+            }
+            return 0;
+        }
+
+    }
+
+    
+
+    
+    if (flag == ISROWSET) {
+        pIRowset->Release();
+    }
+    if (flag == ISROW) {
+        m_piRow->Release();
+    }
+
+    pICommandText->Release();
+
+    return 0;
+}
+
+/*
+* method to update a row
+*
+* @param unsigned int
+* @param (struct DBPERSON)
+* @return int (can be -1 = error or 0 = success)
+*
+*/
+int OLEDb::updateRow(unsigned int ID, LPDATA dbrow) {
+
+    WCHAR format[255] = L"UPDATE ... WHERE id = %d";
+    StringCchPrintf(m_SQLString, 255, format, ID);
+
+    return 0;
+}
+
+
+/*
+* method to insert a new row
+*
+* @param (struct) DBPERSON*
+* @return int (can be -1 = error or 0 = success)
+*
+*/
+int OLEDb::insertRow(LPDATA dbrow) {
+    WCHAR format[255] = L"INSERT INTO %s.dbo.%s ";
+
+    return 0;
+}
+
+/*
+* method to delete a row
+*
+* @param unsigned int
+* @return int (can be -1 = error or 0 = success)
+*/
+int OLEDb::deleteRow(unsigned int ID) {
+    WCHAR format[255] = L"DELETE FROM %s.dbo.%s WHERE id = %d";
+    StringCchPrintf(m_SQLString, 255, format, m_dbName, m_table, ID);
+
+    return 0;
+}
+
+/*
+* private methods
+*/ 
+void OLEDb::geterror(HRESULT hrReturned) {
+    HRESULT  hr = E_FAIL;
+    IErrorInfo* pIErrorInfo = NULL;
+    IErrorRecords* pIErrorRecords;
+    BSTR pbstrDescription;
+    ULONG  cRecords;
+    ULONG  ulRecordNum = 0;
+    DISPPARAMS pdispparams;
+    ERRORINFO            ErrorInfo;
+
+
+    if (FAILED(hrReturned))
+    {
+        hr = GetErrorInfo(0, &pIErrorInfo);
+
+        if (SUCCEEDED(hr) && pIErrorInfo)
+        {
+            pIErrorInfo->GetDescription(&pbstrDescription);
+
+            hr = pIErrorInfo->QueryInterface(IID_IErrorRecords,
+                (void**)&pIErrorRecords);
+            if (SUCCEEDED(hr))
+            {
+                hr = pIErrorRecords->GetRecordCount(&cRecords);
+                pIErrorRecords->GetErrorParameters(ulRecordNum, &pdispparams);
+                pIErrorRecords->GetBasicErrorInfo(0, &ErrorInfo);
+
+            }
+        }
+    }
+}
+
+
+HRESULT OLEDb::GetColumn(IRow* pUnkRow, ULONG iStart, ULONG iEnd, OUT int* id) {
+    HRESULT hr = E_FAIL;
+    ULONG iidx;   // loop counter  
+    DBORDINAL cColumns;   // Count of columns  
+    ULONG cUserCols;   // Count of user columns  
+
+    DBCOLUMNINFO* prgInfo;   // Column of info. array  
+    OLECHAR* pColNames;   // Array of column names  
+
+    DBCOLUMNACCESS* prgColumns;   // Ptr to column access structures array  
+    DBCOLUMNINFO* pCurrInfo;
+    DBCOLUMNACCESS* pCurrCol;
+
+    IColumnsInfo* pIColumnsInfo = NULL;
+
+    cUserCols = iEnd - iStart + 1;
+    //cUserCols = 1;
+
+    // Initialize  
+    cColumns = 0;
+    prgInfo = NULL;
+    pColNames = NULL;
+    prgColumns = NULL;
+
+    hr = pUnkRow->QueryInterface(IID_IColumnsInfo, (void**)&pIColumnsInfo);
+    if (FAILED(hr)) {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+
+    hr = pIColumnsInfo->GetColumnInfo(&cColumns, &prgInfo, &pColNames);
+    if (FAILED(hr)) {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+
+    prgColumns = new DBCOLUMNACCESS[cUserCols];
+    if (!prgColumns) {   // cUserCols is only 1  
+        return E_FAIL;
+    }
+    ZeroMemory((void*)prgColumns, sizeof(DBCOLUMNACCESS) * cUserCols);
+
+    for (iidx = 0; iidx < cUserCols; iidx++) {
+        pCurrInfo = prgInfo + iidx + iStart - 1;
+        pCurrCol = prgColumns + iidx;
+
+        // Here the values of DBCOLUMNACCESS elements is set (pData and cbMaxLen)Thus IRow->GetColumns()   
+        // will return actual data.  
+        if (InitColumn(pCurrCol, pCurrInfo) == FALSE) {
+            if (pIColumnsInfo)
+                pIColumnsInfo->Release();
+            if (prgColumns)
+                delete[] prgColumns;
+
+            return E_FAIL;
+        }
+
+    }
+    hr = pUnkRow->GetColumns(cUserCols, prgColumns);   // cUserCols = 1  
+    if (FAILED(hr))
+    {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+
+    WCHAR pData[2] = { 0 };
+    StringCchPrintf(pData, 2, L"%s", (WCHAR*)prgColumns->pData);
+    *id = _wtoi(pData);
+    id = (int*)pData;
+
+    return hr;
+}
+
+HRESULT OLEDb::GetColumns(IRow* pUnkRow, ULONG numberOfColumns)
+{
+    HRESULT hr = E_FAIL;
+    ULONG iidx;   // loop counter  
+    DBORDINAL cColumns;   // Count of columns  
+
+
+    DBCOLUMNINFO* prgInfo;   // Column of info. array  
+    OLECHAR* pColNames;   // Array of column names  
+
+    DBCOLUMNACCESS* prgColumns;   // Ptr to column access structures array  
+    DBCOLUMNINFO* pCurrInfo;
+    DBCOLUMNACCESS* pCurrCol;
+
+    IColumnsInfo* pIColumnsInfo = NULL;
+
+    // Initialize  
+    cColumns = 0;
+    prgInfo = NULL;
+    pColNames = NULL;
+    prgColumns = NULL;
+
+    hr = pUnkRow->QueryInterface(IID_IColumnsInfo, (void**)&pIColumnsInfo);
+    if (FAILED(hr)) {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+
+    hr = pIColumnsInfo->GetColumnInfo(&cColumns, &prgInfo, &pColNames);
+    if (FAILED(hr)) {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+
+    prgColumns = new DBCOLUMNACCESS[numberOfColumns];
+    if (!prgColumns) {   // cUserCols is only 1  
+        return E_FAIL;
+    }
+    ZeroMemory((void*)prgColumns, sizeof(DBCOLUMNACCESS) * numberOfColumns);
+
+    for (iidx = 0; iidx < numberOfColumns; iidx++) {
+        pCurrInfo = prgInfo + iidx;
+        pCurrCol = prgColumns + iidx;
+
+        // Here the values of DBCOLUMNACCESS elements is set (pData and cbMaxLen)Thus IRow->GetColumns()   
+        // will return actual data.  
+        if (InitColumn(pCurrCol, pCurrInfo) == FALSE) {
+            if (pIColumnsInfo)
+                pIColumnsInfo->Release();
+            if (prgColumns)
+                delete[] prgColumns;
+
+            return E_FAIL;
+        }
+    }
+
+    hr = pUnkRow->GetColumns(numberOfColumns, prgColumns);   // cUserCols = 1  
+    if (FAILED(hr))
+    {
+        if (pIColumnsInfo)
+            pIColumnsInfo->Release();
+
+        if (prgColumns)
+            delete[] prgColumns;
+
+        return hr;
+    }
+    /*columns = new PDBPERSON[numberOfColumns];
+    
+    for (int i = 0; i < (int)numberOfColumns; i++) {
+        int len = lstrlenW((WCHAR*)prgColumns[i].pData);
+        columns[i]->id = (WCHAR*)prgColumns[i].pData;
+    }
+    */
+
+    return hr;
+}
+
+
+/*
+* private method to init a column
+* @param DBCOLUMNACCESS*
+* @param DBCOLUMNINFO*
+* @return BOOL
+* 
+*/
+BOOL OLEDb::InitColumn(DBCOLUMNACCESS* pCol, DBCOLUMNINFO* pInfo) {
+    // If text or image column is being read,in which case the max  possible length of a value is   
+    // the column is hugh,we will limit that size to 512 bytes (for illustration purposes).  
+    DBLENGTH ulSize = (pInfo->ulColumnSize < 0x7fffffff) ? pInfo->ulColumnSize : 512;
+
+    // Verify dta buffer is large enough.  
+    if (pCol->cbMaxLen < (ulSize + 1)) {
+        if (pCol->pData) {
+            delete[] pCol->pData;
+            pCol->pData = NULL;
+        }
+
+        // Allocate data buffer  
+        void* p = pCol->pData = new WCHAR[ulSize + 1];
+        if (!(p /* pCol->pData = new WCHAR[ulSize + 1] */))
+            return FALSE;
+
+        // set the max length of caller-initialized memory.  
+        pCol->cbMaxLen = sizeof(WCHAR) * (ulSize + 1);
+
+        // In the above 2 steps, pData is pointing to memory (it is not NULL) and cbMaxLen has a value   
+        // (not 0), so next call to IRow->GetData() will read the data from the column.  
+    }
+
+    // Clear memory buffer  
+    ZeroMemory((void*)pCol->pData, pCol->cbMaxLen);
+
+    // Set properties.  
+    pCol->wType = DBTYPE_WSTR;
+    pCol->columnid = pInfo->columnid;
+    pCol->cbDataLen = 0;
+    pCol->dwStatus = 0;
+    pCol->dwReserved = 0;
+    pCol->bPrecision = 0;
+    pCol->bScale = 0;
+    return TRUE;
+}
+
+/*
+* method to get a rowset dependig 
+* 
+* @param DBROWOFFSET
+* 
+* @return HRESULT
+*/
+HRESULT OLEDb::GetRowsets(IN OUT DBROWOFFSET lRowsOffset) {
+    HRESULT hr = E_FAIL;
+    //HROW **m_prghRows;
+    DBROWCOUNT cRows = MAX_ROWS;
+    DBCOUNTITEM pcRowsObtained = 0;
+
+
+    return hr;
+}
+

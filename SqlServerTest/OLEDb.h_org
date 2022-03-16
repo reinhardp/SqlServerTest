@@ -1,0 +1,216 @@
+#pragma once
+
+#include "defines.h"
+#include "framework.h"
+#include "includes.h"
+#include <strsafe.h>
+#include <msoledbsql.h>
+
+#define MAXBUFSIZE					31
+#define NUMELEM(p)					(sizeof(p)/sizeof((p)[0]))
+#define ISROWSET					100
+#define ISROW						101
+#define SQL_QUERYSTRING_LENGTH		1024
+#define MAX_ROWS					20
+
+class OLEDb
+{
+
+protected:
+	unsigned int m_currentRow = 0;
+	IDBInitialize* m_pIDBInitialize = NULL;
+	IDBCreateCommand* m_pIDBCreateCommand = NULL;
+	IDBCreateSession* m_pIDBCreateSession = NULL;
+	WCHAR m_QueryString[SQL_QUERYSTRING_LENGTH] = { '\0' };	// The query string
+
+
+protected:
+	WCHAR m_host[MAX_INI_ENTRIES_LENGTH] = { '\0' };	//
+	WCHAR m_port[MAX_INI_ENTRIES_LENGTH] = { '\0' };	//
+	WCHAR m_dbName[MAX_INI_ENTRIES_LENGTH] = { '\0' };	//
+	WCHAR m_user[MAX_INI_ENTRIES_LENGTH] = { '\0' };
+	WCHAR m_pwd[MAX_INI_ENTRIES_LENGTH] = { '\0' };
+	WCHAR m_table[MAX_INI_ENTRIES_LENGTH] = { '\0' };
+	IRow* m_piRow = NULL;
+	IRowset* m_piRowset = NULL;
+	HROW** m_prghRows = NULL;
+	
+
+	bool  m_getallRows = false;
+	ULONG m_numberOfColumns = 0;
+	WCHAR m_SQLString[SQL_QUERYSTRING_LENGTH] = { '\0' }; 
+	WCHAR m_SQLQueryString[SQL_QUERYSTRING_LENGTH] = { '\0' };
+
+protected:
+	
+	int getdata(int flag);
+	void geterror(HRESULT hrReturned);
+	HRESULT GetColumn(IRow* pUnkRow, ULONG iStart, ULONG iEnd, OUT int* id);
+	HRESULT GetColumns(IRow* pUnkRow, ULONG numberOfColumns);
+	BOOL InitColumn(DBCOLUMNACCESS* pCol, DBCOLUMNINFO* pInfo);
+	/*
+	* converts a WCHAR* to int
+	* 
+	* @param WCHAR*
+	* @return nt
+	*/
+	int getNum(WCHAR* data) {
+		int numeric_peek = 0;
+
+		if (iswdigit(data[0])) {
+			// store peek as numeric
+			wchar_t s[2];
+			s[0] = data[0];
+			s[1] = 0;
+			numeric_peek = _wtoi(s);
+		}
+		return numeric_peek;
+	}
+
+
+public:
+	inline OLEDb(void) {
+		
+	}
+
+
+	/*
+	* destructor
+	*/
+	~OLEDb();
+
+	/*
+	* connect to database
+	* @param none
+	* @return bool
+	*/
+	int connect(void);
+
+	/*
+	* 
+	*/
+	HRESULT GetRowsets(DBROWOFFSET lRowsOffset);
+
+	/*
+	*
+	*/
+	HRESULT processQuery();
+
+	/*
+	* init method
+	* @param WHAR*
+	* @param WHAR*
+	* @param WHAR*
+	* @param WHAR*
+	* @param WHAR*
+	* 
+	* @return void
+	*/
+	void init(WCHAR* host, WCHAR* dbName, WCHAR* user, WCHAR* pwd, WCHAR* table, WCHAR* port) {
+		StringCchPrintfW(m_host, MAX_INI_ENTRIES_LENGTH, L"%s", host);
+		StringCchPrintfW(m_port, MAX_INI_ENTRIES_LENGTH, L"%s", port);
+		StringCchPrintfW(m_dbName, MAX_INI_ENTRIES_LENGTH, L"%s", dbName);
+		StringCchPrintfW(m_user, MAX_INI_ENTRIES_LENGTH, L"%s", user);
+		StringCchPrintfW(m_pwd, MAX_INI_ENTRIES_LENGTH, L"%s", pwd);
+		StringCchPrintfW(m_table, MAX_INI_ENTRIES_LENGTH, L"%s", table);
+	}
+
+	/*
+	* set the query string
+	* 
+	* @param WCHAR* (the full querystring) 
+	*/
+	void setQueryString(WCHAR* queryString) {
+		StringCchPrintfW(m_QueryString, SQL_QUERYSTRING_LENGTH, L"%s", queryString);
+	}
+
+
+	/*
+	* get all rows stored in the database
+	* @param WCHAR**
+	* @return bool
+	*/
+	int getAll(LPDATA data);
+
+	/*
+	* 
+	*/
+	int getNumberofColumns(void);
+
+	/*
+	* method to get the number of rows from a table
+	*/
+	int getNumberofRows(void);
+
+	/*
+	* 
+	*/
+	inline void setNumberofColumns(ULONG numberOfColumns) {
+		m_numberOfColumns = numberOfColumns;
+	}
+
+	/*
+	* 
+	*/
+	unsigned int getLastID(void);
+
+	/*
+	* 
+	*/
+	bool getFirstRow(void);
+
+	/*
+	* 
+	*/
+	bool getNextRow(void);
+
+	/*
+	* method to fetch on row from the table
+	* 
+	* @param IN int // the rownumber
+	* @param OUT WCHAR** an array of column values
+	*
+	* @return int
+	*/
+	int getRow(LPDATA data, int rowNumber);
+
+	/*
+	* method to update a row
+	* 
+	* @param unsigned int
+	* @param (struct DBPERSON)
+	* @return int (can be -1 = error or 0 = success)
+	* 
+	*/
+	int updateRow(unsigned int ID, LPDATA dbrow);
+
+
+	/*
+	* method to insert a new row
+	* 
+	* @param (struct) DBPERSON*
+	* @return int (can be -1 = error or 0 = success)
+	*
+	*/
+	int insertRow(LPDATA dbrow);
+
+	/*
+	* method to delete a row
+	* 
+	* @param unsigned int
+	* @return int (can be -1 = error or 0 = success) 
+	*/
+	int deleteRow(unsigned int ID);
+
+	/*
+	* method to disconnect from server
+	*/
+	bool disconnect(void);
+
+	/*
+	* method to release handles
+	*/
+	void relaese(void);
+
+};
+
