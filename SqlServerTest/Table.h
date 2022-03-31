@@ -2,6 +2,8 @@
 #include "framework.h"
 //#include "OLEDb.h"
 #include "MYSql.h"
+#include "includes.h"
+
 
 class Table : public MYSql
 {
@@ -19,7 +21,7 @@ protected:
 	int m_currentPage = 0;
 	const int PAGE_SIZE = 10;
 
-	int* m_Ids = 0; // a list of row ID's generated on the fly
+	int32_t* m_Ids = 0; // a list of row ID's generated on the fly
 
 public:
 
@@ -49,7 +51,7 @@ public:
 	* @param none
 	* @return int
 	*/
-	int* GetIds() {
+	int32_t* GetIds() {
 		return m_Ids;
 	}
 
@@ -67,9 +69,13 @@ public:
 
 	bool CreateOLeDBBody();
 
-	bool CreateMySQLDBBody(int rows);
+	bool CreateMySQLDBBody(int rows, struct DATA *table);
 	bool CreateMySQLDBBody();
 
+
 	bool recalculateColumnwidth();
+	HWND getlistHandle() {
+		return m_hwndList;
+	}
 };
 

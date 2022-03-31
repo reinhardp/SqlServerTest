@@ -128,12 +128,13 @@
       <MultiProcessorCompilation>
       </MultiProcessorCompilation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <AdditionalOptions>/analyze:stacksize30000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Comctl32.lib;Userenv.lib;mysqlcppconn8.lib;libcrypto.lib;libssl.lib;mysqlcppconn.lib;mysqlcppconn-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>d:\mysql-connector-c++-8.0.28-winx64\lib64\vs14;c:\Program Files\Microsoft SQL Server\Client SDK\OLEDB\186\SDK\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Comctl32.lib;Userenv.lib;libcrypto.lib;libssl.lib;mysqlcppconn.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\MySQL\MySQL Connector C++ 8.0\debug;c:\Program Files\Microsoft SQL Server\Client SDK\OLEDB\186\SDK\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ShowProgress>NotSet</ShowProgress>
     </Link>
     <ResourceCompile>
@@ -149,6 +150,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/analyze:stacksize30000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

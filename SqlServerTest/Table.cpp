@@ -1,11 +1,11 @@
 #include "Table.h"
 #include <windows.h>
 #include <Objbase.h>
+#include <stdlib.h>
 #include <commctrl.h>
 //#include <oledb.h>
 //#include <msoledbsql.h>
 #include <strsafe.h>
-#include "includes.h"
 
 int Table::Init(HWND hWnd, HINSTANCE hinst) 
 {
@@ -42,8 +42,7 @@ bool Table::ResizeTable(HWND hWndstatus, HWND mainhWnd, int cParts = 1) {
     return ret;
 }
 
-bool Table::CreateTable()
-{
+bool Table::CreateTable() {
     // TODO: Fügen Sie hier Ihren Implementierungscode ein..
     INITCOMMONCONTROLSEX icex;           // Structure for control initialization.
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -196,7 +195,7 @@ bool Table::CreateOLeDBBody() {
 
 bool Table::recalculateColumnwidth() {
     int index = 0;
-    int cItems = sizeof(rgtBody) / sizeof(rgtBody[0]);
+    int cItems = sizeof(g_Body);
     for (index; index < cItems; index++)
     {
         SendMessage(m_hwndList, LVM_SETCOLUMNWIDTH, index, LVSCW_AUTOSIZE_USEHEADER);
@@ -207,30 +206,55 @@ bool Table::recalculateColumnwidth() {
 bool Table::CreateMySQLDBBody() {
     return true;
 }
+
 /*
-* method to crete the body from MySQL database
+* method to create the body from MySQL database
 */
-bool Table::CreateMySQLDBBody(int rows) {
+bool Table::CreateMySQLDBBody(int rows, struct DATA *table) {
 
-    int index = 0;
-    LVITEM lvI;
-    lvI.pszText = LPSTR_TEXTCALLBACK; // Sends an LVN_GETDISPINFO message.
-    lvI.mask = LVIF_TEXT;
-    lvI.stateMask = 0;
-    lvI.iSubItem = 0;
-    lvI.state = 0;
-    m_Ids = new int[rows] {0};
+    WCHAR wc[30];
+    WCHAR wcb[11];
+    WCHAR wcc[24];
+    WCHAR wcd[DTEXT_LENGTH];
+    size_t retval;
+    int row = 0;
+    m_Ids = new int32_t[rows] {0};
 
-    for (index; index < rows; index++)
+    while (m_res->next())
     {
-        lvI.iItem = index;
-        m_Ids[index] = rgtBody[index].ID;   // ??
-        // Insert items into the list.
-        if (ListView_InsertItem(m_hwndList, &lvI) == -1)
-            return false;
+        m_Ids[row] = m_res->getInt("id");   // the ID from the database
+        
+        sql::SQLString c = m_res->getString("firstname");
+        const char* y = c.c_str();
+        mbstowcs_s(&retval, wc, 30, y, strlen(y));
+        StringCbPrintfW(table[row].firstname, retval * sizeof(wchar_t), L"%s", wc);
 
-        SendMessage(m_hwndList, LVM_SETCOLUMNWIDTH, index, LVSCW_AUTOSIZE_USEHEADER);
-        ListView_MapIndexToID(m_hwndList, index);
+        c = m_res->getString("lastname");
+        y = c.c_str();
+        mbstowcs_s(&retval, wc, 30, y, strlen(y));
+        StringCbPrintfW(table[row].lastname, retval * sizeof(wchar_t), L"%s", wc);
+        
+        c = m_res->getString("birthday");
+        y = c.c_str();
+        mbstowcs_s(&retval, wcb, 11, y, strlen(y));
+        StringCbPrintf(table[row].birthday, retval * sizeof(wchar_t), L"%s", wcb);
+
+        c = m_res->getString("dtext");
+        y = c.c_str();
+        mbstowcs_s(&retval, wcd, DTEXT_LENGTH, y, strlen(y));
+        StringCbPrintfW(table[row].dtext, DTEXT_LENGTH, L"%s", wcd);
+
+        c = m_res->getString("created_at");
+        y = c.c_str();
+        mbstowcs_s(&retval, wcc, 24, y, strlen(y));
+        StringCbPrintf(table[row].created_at, retval * sizeof(wchar_t), L"%s", wcc);
+
+        c = m_res->getString("created_by");
+        y = c.c_str();
+        mbstowcs_s(&retval, wc, 30, y, strlen(y));
+        StringCbPrintfW(table[row].created_by, retval * sizeof(wchar_t), L"%s", wc);
+
+        row++;
 
     }
 

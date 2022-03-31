@@ -1,45 +1,16 @@
--- Only for real MySQL  database and not for MariaDB
-
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Erstellungszeit: 13. Mrz 2022 um 08:54
--- Server-Version: 10.4.22-MariaDB
--- PHP-Version: 7.4.27
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-
---
--- Datenbank: `mstest`
---
-
-CREATE DATABASE IF NOT EXISTS `mstest`;
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `mstest`
---
-use `mstest`;
-
 DROP TABLE IF EXISTS `mstest`;
 
 CREATE TABLE `mstest` (
-  `id` bigint(20) UNSIGNED COLLATE utf8mb4_unicode_ci NOT NULL,
-  `firstname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lastname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `firstname` varchar(50) NOT NULL,
+  `lastname` varchar(50) NOT NULL,
   `birthday` date NOT NULL,
-  `dtext` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dtext` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_by` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `updated_at` timestamp NULL on update now(),
-  `updated_by` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `created_by` varchar(50)  NOT NULL,
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_by` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB;
 
 --
 -- Indizes der exportierten Tabellen
@@ -74,8 +45,4 @@ INSERT INTO `mstest` (`firstname`, `lastname`, `birthday`, `dtext`, `created_by`
 	('Trude', 'Pagitsch', '1940-11-10', 'nur ein Test 7', 'reinhardp'),
 	('Paul', 'Pagitsch', '1960-11-08', 'nur ein Test 8', 'reinhardp'),
 	('Manfred',	'Pagitsch', '1955-10-08', 'nur ein Test 9', 'reinhardp'),
-	('Gerti', 'Müller', '1957-10-08', 'nur ein Test 9', 'reinhardp');
-
-
-
-
+	('Gerti', 'Müller', '1957-10-08', 'nur ein Test 9', 'reinhardp')

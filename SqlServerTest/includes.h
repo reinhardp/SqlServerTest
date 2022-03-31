@@ -7,14 +7,14 @@
  * 
  * will be used for test and real data
 */
-const TCHAR tHeader[6][30] = {L"Vorname", L"Nachname", L"Geburtstag", L"Text", L"Erstellt am", L"Erstellt von"};	// Table header, es gibt auch noch updated von und updated wan Spalten
+const TCHAR tHeader[6][30] = {L"Vorname", L"Nachname", L"Geburtstag", L"Text", L"Erstellt von", L"Erstellt am" };	// Table header, es gibt auch noch updated von und updated wan Spalten
 
 
 /*
 * structure for the table 
 * keine Ahnung ob notwendig!!!
 */
-typedef struct tagDATA {
+struct DATA {
 	unsigned int ID;
 	wchar_t firstname[30];
 	wchar_t lastname[30];
@@ -24,7 +24,7 @@ typedef struct tagDATA {
 	wchar_t created_at[24];
 	wchar_t updated_by[30];
 	wchar_t updated_at[24];
-} DATA, *LPDATA;
+} ;
 
 /*
  * Data for the Table for tests
@@ -43,3 +43,4 @@ static DATA rgtBody[] = {
 	{10,L"Manfred",	L"Pagitsch", L"1955-10-08", L"nur ein Test 9", L"2022-02-14 09:11:44.007", L"reinhardp", L"", L""}
 };
 
+static DATA* g_Body;

@@ -28,6 +28,12 @@ static char THIS_FILE[] = __FILE__;
 #define IDB_STATUS			200
 
 #define DATE_TIME_LENGTH    26
+#define LASTNAME_LENGTH		50
+#define FIRSTNAME_LENGTH	50
+#define DTEXT_LENGTH		8000
+#define CREATED_BY_LENGTH	50
+#define UPDATED_BY_LENGTH	50
+
 
 //ROUNDUP on all platforms pointers must be aligned properly
 //#define ROUNDUP_AMOUNT	8
