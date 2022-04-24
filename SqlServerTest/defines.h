@@ -1,17 +1,24 @@
 #pragma once
 // für Debug 
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-#define MAX_INI_ENTRIES_LENGTH 100
+#define USE_UNICODE true
 
+#define MAX_INI_ENTRIES_LENGTH 100
 /*
 * defines for the config
 */
+
 #define CONFIG_DIRECTORY	L"sqlservertest"	// the directory containing the INI file in the user home directory
 #define CONFIG_FILE			L"sqlservertest.ini"
 #define DB_SECTION			L"Database"
+
+#define CONFIG_DIRECTORYA	"sqlservertest"	// the directory containing the INI file in the user home directory
+#define CONFIG_FILEA		"sqlservertest.ini"
+#define DB_SECTIONA			"Database"
 
 /*
 * defines for ...????
@@ -22,15 +29,21 @@ static char THIS_FILE[] = __FILE__;
 /*
  * defines for the table
 */
-#define CREATEDBY			L"reinhardp"	//  only for tests as a fixed value 
-#define UPDATEDBY			L"irpag"        //  only for tests as a fixed value
+
+#if USE_UNICODE == true
+#define CREATEDBY			"reinhardp"	//  only for tests as a fixed value 
+#define UPDATEDBY			"irpag"        //  only for tests as a fixed value
+#else
+#define CREATEDBY			"reinhardp"	//  only for tests as a fixed value 
+#define UPDATEDBY			"irpag"        //  only for tests as a fixed value
+#endif
 
 #define IDB_STATUS			200
 
 #define DATE_TIME_LENGTH    26
 #define LASTNAME_LENGTH		50
 #define FIRSTNAME_LENGTH	50
-#define DTEXT_LENGTH		8000
+#define DTEXT_LENGTH		7000
 #define CREATED_BY_LENGTH	50
 #define UPDATED_BY_LENGTH	50
 

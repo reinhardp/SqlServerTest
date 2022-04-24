@@ -1,0 +1,1239 @@
+>*__cdecl mysql_stmt_init
+| >*__cdecl list_add
+| | enter: root: 0000000000000000  element: 000002968D407438
+| <*__cdecl list_add
+<*__cdecl mysql_stmt_init
+>mysql_stmt_prepare
+| >cli_advanced_command
+| | >vio_is_blocking
+| | <vio_is_blocking
+| | >net_clear
+| | <net_clear
+| | >vio_is_blocking
+| | <vio_is_blocking
+| | >net_write_command
+| | | enter: length: 17
+| | | >net_write_buff
+| | | <net_write_buff
+| | | >net_write_buff
+| | | <net_write_buff
+| | | >net_flush
+| | | | >net_write_packet
+| | | | | >__cdecl vio_ssl_write
+| | | | | <__cdecl vio_ssl_write
+| | | | <net_write_packet
+| | | <net_flush
+| | <net_write_command
+| | exit: result: 0
+| <cli_advanced_command
+| >cli_read_prepare_result
+| | >free_old_query
+| | | >MEM_ROOT::Clear
+| | | | enter: root: 000002968D38ACE0
+| | | <MEM_ROOT::Clear
+| | <free_old_query
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+0C 00 00 01 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (12)
+00 01 00 00 00 00 00 00 00 00 00 00 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | exit: field_count: 0  param_count: 0  warning_count: 0
+| <cli_read_prepare_result
+| info: Parameter count: 0
+<mysql_stmt_prepare
+>__cdecl mysql_stmt_param_count
+<__cdecl mysql_stmt_param_count
+>*__cdecl mysql_stmt_result_metadata
+<*__cdecl mysql_stmt_result_metadata
+>__cdecl mysql_stmt_param_count
+<__cdecl mysql_stmt_param_count
+>mysql_stmt_bind_param
+<mysql_stmt_bind_param
+>mysql_stmt_execute
+| >MEM_ROOT::ClearForReuse
+| <MEM_ROOT::ClearForReuse
+| >cli_stmt_execute
+| | >net_clear
+| | <net_clear
+| | >mysql_int_serialize_param_data
+| | | >net_clear
+| | | <net_clear
+| | | prep_stmt_exec: Sending param_count=0
+| | | >my_realloc_str
+| | | <my_realloc_str
+| | <mysql_int_serialize_param_data
+| | >execute
+| | | packet: Memory: 000002968D4094A0  Bytes: (1)
+00 
+| | | prep_stmt_exec: Setting PARAMETER_COUNT_AVAILABLE
+| | | >cli_advanced_command
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_clear
+| | | | <net_clear
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_write_command
+| | | | | enter: length: 1
+| | | | | >net_write_buff
+| | | | | <net_write_buff
+| | | | | >net_write_buff
+| | | | | <net_write_buff
+| | | | | >net_write_buff
+| | | | | <net_write_buff
+| | | | | >net_flush
+| | | | | | >net_write_packet
+| | | | | | | >__cdecl vio_ssl_write
+| | | | | | | <__cdecl vio_ssl_write
+| | | | | | <net_write_packet
+| | | | | <net_flush
+| | | | <net_write_command
+| | | | exit: result: 0
+| | | <cli_advanced_command
+| | | >cli_read_query_result
+| | | | >__cdecl cli_safe_read_with_ok
+| | | | | >vio_is_blocking
+| | | | | <vio_is_blocking
+| | | | | >net_read_raw_loop
+| | | | | | >__cdecl vio_ssl_read
+| | | | | | <__cdecl vio_ssl_read
+| | | | | <net_read_raw_loop
+| | | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+6B 00 00 01 
+| | | | | >net_read_raw_loop
+| | | | | | >__cdecl vio_ssl_read
+| | | | | | <__cdecl vio_ssl_read
+| | | | | <net_read_raw_loop
+| | | | | net read: Memory: 000002968D3CE340  Bytes: (107)
+00 00 00 02 40 00 00 00 62 00 1D 14 63 68 61 72 61 63 74 65 72 5F 73 65 74 5F 
+63 6C 69 65 6E 74 07 75 74 66 38 6D 62 34 00 21 18 63 68 61 72 61 63 74 65 72 
+5F 73 65 74 5F 63 6F 6E 6E 65 63 74 69 6F 6E 07 75 74 66 38 6D 62 34 00 1E 15 
+63 68 61 72 61 63 74 65 72 5F 73 65 74 5F 72 65 73 75 6C 74 73 07 75 74 66 38 
+6D 62 34 
+| | | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | | <__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok
+| | | | >free_old_query
+| | | | | >MEM_ROOT::Clear
+| | | | | | enter: root: 000002968D38ACE0
+| | | | | <MEM_ROOT::Clear
+| | | | <free_old_query
+| | | | info: affected_rows: 0  insert_id: 0
+| | | | info: status: 16386  warning_count: 0
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 0000000000000000  element: 000002968D379D60
+| | | | <*__cdecl list_add
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 000002968D379D60  element: 000002968D3C1420
+| | | | <*__cdecl list_add
+| | | | >*__cdecl my_charset_get_by_name
+| | | | | enter: name: 'utf8mb4'
+| | | | <*__cdecl my_charset_get_by_name
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 000002968D3C1420  element: 000002968D379E00
+| | | | <*__cdecl list_add
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 000002968D379E00  element: 000002968D3C0730
+| | | | <*__cdecl list_add
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 000002968D3C0730  element: 000002968D37A080
+| | | | <*__cdecl list_add
+| | | | >my_multi_malloc
+| | | | <my_multi_malloc
+| | | | >*__cdecl list_add
+| | | | | enter: root: 000002968D37A080  element: 000002968D3C1270
+| | | | <*__cdecl list_add
+| | | <cli_read_query_result
+| | <execute
+| <cli_stmt_execute
+<mysql_stmt_execute
+>mysql_real_query
+| enter: handle: 000002968D3BDC70
+| query: Query = 'SELECT count(id) as amount from mstest'
+| >mysql_send_query
+| | >mysql_prepare_com_query_parameters
+| | | >mysql_int_serialize_param_data
+| | | | >net_clear
+| | | | <net_clear
+| | | | prep_stmt_exec: Sending param_count=0
+| | | | >my_realloc_str
+| | | | <my_realloc_str
+| | | | >my_realloc_str
+| | | | <my_realloc_str
+| | | <mysql_int_serialize_param_data
+| | | >mysql_extension_bind_free
+| | | <mysql_extension_bind_free
+| | <mysql_prepare_com_query_parameters
+| | >cli_advanced_command
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_clear
+| | | <net_clear
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_write_command
+| | | | enter: length: 38
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_flush
+| | | | | >net_write_packet
+| | | | | | >__cdecl vio_ssl_write
+| | | | | | <__cdecl vio_ssl_write
+| | | | | <net_write_packet
+| | | | <net_flush
+| | | <net_write_command
+| | | exit: result: 0
+| | <cli_advanced_command
+| <mysql_send_query
+| >cli_read_query_result
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+01 00 00 01 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (1)
+01 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >free_old_query
+| | | >MEM_ROOT::Clear
+| | | | enter: root: 000002968D38ACE0
+| | | <MEM_ROOT::Clear
+| | <free_old_query
+| | >*__cdecl cli_read_metadata_ex
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+1C 00 00 02 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (28)
+03 64 65 66 00 00 00 06 61 6D 6F 75 6E 74 00 0C 3F 00 15 00 00 00 08 81 00 00 
+00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | <*__cdecl cli_read_metadata_ex
+| | exit: ok
+| <cli_read_query_result
+| >mysql_extension_bind_free
+| <mysql_extension_bind_free
+<mysql_real_query
+>*__cdecl mysql_store_result
+| >*__cdecl cli_read_rows
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+03 00 00 03 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (3)
+02 31 34 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >MEM_ROOT::AllocSlow
+| | | enter: root: 000002968D3EBE20
+| | | >*__cdecl MEM_ROOT::AllocBlock
+| | | <*__cdecl MEM_ROOT::AllocBlock
+| | <MEM_ROOT::AllocSlow
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+07 00 00 04 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (7)
+FE 00 00 02 00 00 00 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | info: status: 2  warning_count: 0
+| | info: status: 2  warning_count:  0
+| | exit: Got 1 rows
+| <*__cdecl cli_read_rows
+| >MEM_ROOT::Clear
+| | enter: root: 000002968D3EC190
+| <MEM_ROOT::Clear
+<*__cdecl mysql_store_result
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_real_query
+| enter: handle: 000002968D3BDC70
+| query: Query = 'SELECT id, firstname, lastname, dtext, birthday, created_by, created_at from mstest;'
+| >mysql_send_query
+| | >mysql_prepare_com_query_parameters
+| | | >mysql_int_serialize_param_data
+| | | | >net_clear
+| | | | <net_clear
+| | | | prep_stmt_exec: Sending param_count=0
+| | | | >my_realloc_str
+| | | | <my_realloc_str
+| | | | >my_realloc_str
+| | | | <my_realloc_str
+| | | <mysql_int_serialize_param_data
+| | | >mysql_extension_bind_free
+| | | <mysql_extension_bind_free
+| | <mysql_prepare_com_query_parameters
+| | >cli_advanced_command
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_clear
+| | | <net_clear
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_write_command
+| | | | enter: length: 84
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_write_buff
+| | | | <net_write_buff
+| | | | >net_flush
+| | | | | >net_write_packet
+| | | | | | >__cdecl vio_ssl_write
+| | | | | | <__cdecl vio_ssl_write
+| | | | | <net_write_packet
+| | | | <net_flush
+| | | <net_write_command
+| | | exit: result: 0
+| | <cli_advanced_command
+| <mysql_send_query
+| >cli_read_query_result
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+01 00 00 01 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (1)
+07 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >free_old_query
+| | | >MEM_ROOT::Clear
+| | | | enter: root: 000002968D38ACE0
+| | | <MEM_ROOT::Clear
+| | <free_old_query
+| | >*__cdecl cli_read_metadata_ex
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >MEM_ROOT::AllocSlow
+| | | | enter: root: 000002968D38ACE0
+| | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | <MEM_ROOT::AllocSlow
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+2C 00 00 02 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (44)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 02 
+69 64 02 69 64 0C 3F 00 0A 00 00 00 03 23 42 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+3A 00 00 03 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (58)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 09 
+66 69 72 73 74 6E 61 6D 65 09 66 69 72 73 74 6E 61 6D 65 0C FF 00 C8 00 00 00 
+FD 01 10 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+38 00 00 04 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (56)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 08 
+6C 61 73 74 6E 61 6D 65 08 6C 61 73 74 6E 61 6D 65 0C FF 00 C8 00 00 00 FD 01 
+10 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+32 00 00 05 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (50)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 05 
+64 74 65 78 74 05 64 74 65 78 74 0C FF 00 FC FF 03 00 FC 11 10 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+38 00 00 06 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (56)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 08 
+62 69 72 74 68 64 61 79 08 62 69 72 74 68 64 61 79 0C 3F 00 0A 00 00 00 0A 81 
+10 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+3C 00 00 07 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (60)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 0A 
+63 72 65 61 74 65 64 5F 62 79 0A 63 72 65 61 74 65 64 5F 62 79 0C FF 00 C8 00 
+00 00 FD 01 10 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | | >__cdecl cli_safe_read_with_ok
+| | | | >vio_is_blocking
+| | | | <vio_is_blocking
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+3C 00 00 08 
+| | | | >net_read_raw_loop
+| | | | | >__cdecl vio_ssl_read
+| | | | | <__cdecl vio_ssl_read
+| | | | <net_read_raw_loop
+| | | | net read: Memory: 000002968D3CE340  Bytes: (60)
+03 64 65 66 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 06 6D 73 74 65 73 74 0A 
+63 72 65 61 74 65 64 5F 61 74 0A 63 72 65 61 74 65 64 5F 61 74 0C 3F 00 13 00 
+00 00 07 81 04 00 00 00 
+| | | | >__cdecl cli_safe_read_with_ok_complete
+| | | | <__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok
+| | | >read_one_row_complete
+| | | <read_one_row_complete
+| | | >unpack_field
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | | >MEM_ROOT::AllocSlow
+| | | | | enter: root: 000002968D38ACE0
+| | | | | >*__cdecl MEM_ROOT::AllocBlock
+| | | | | <*__cdecl MEM_ROOT::AllocBlock
+| | | | <MEM_ROOT::AllocSlow
+| | | <unpack_field
+| | <*__cdecl cli_read_metadata_ex
+| | exit: ok
+| <cli_read_query_result
+| >mysql_extension_bind_free
+| <mysql_extension_bind_free
+<mysql_real_query
+>*__cdecl mysql_store_result
+| >*__cdecl cli_read_rows
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+53 00 00 09 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (83)
+01 31 08 52 65 69 6E 68 61 72 64 08 50 61 67 69 74 73 63 68 15 6E 75 72 20 65 
+69 6E 20 54 65 73 74 20 C3 BC 20 C3 B6 20 C3 A4 0A 31 39 36 35 2D 30 39 2D 30 
+38 09 72 65 69 6E 68 61 72 64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 
+34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >MEM_ROOT::AllocSlow
+| | | enter: root: 000002968D3ECF50
+| | | >*__cdecl MEM_ROOT::AllocBlock
+| | | <*__cdecl MEM_ROOT::AllocBlock
+| | <MEM_ROOT::AllocSlow
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+51 00 00 0A 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (81)
+01 32 05 50 65 74 65 72 08 50 61 67 69 74 73 63 68 16 6E 75 72 20 65 69 6E 20 
+54 65 73 74 20 31 20 68 61 6C 6C 6F 20 31 0A 31 39 37 31 2D 30 39 2D 30 36 09 
+72 65 69 6E 68 61 72 64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 
+3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+49 00 00 0B 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (73)
+01 33 05 47 65 72 74 69 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 20 
+54 65 73 74 20 32 0A 31 39 34 33 2D 30 31 2D 30 33 09 72 65 69 6E 68 61 72 64 
+70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+4A 00 00 0C 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (74)
+01 34 06 4D 61 72 74 69 6E 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 
+20 54 65 73 74 20 33 0A 31 39 39 31 2D 31 30 2D 32 39 09 72 65 69 6E 68 61 72 
+64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+4A 00 00 0D 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (74)
+01 35 06 4D 61 72 69 6E 61 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 
+20 54 65 73 74 20 34 0A 31 39 36 39 2D 31 30 2D 30 38 09 72 65 69 6E 68 61 72 
+64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+49 00 00 0E 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (73)
+01 36 05 50 65 74 72 61 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 20 
+54 65 73 74 20 35 0A 31 39 38 30 2D 30 38 2D 30 36 09 72 65 69 6E 68 61 72 64 
+70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+48 00 00 0F 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (72)
+01 37 04 48 69 64 65 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 20 54 
+65 73 74 20 36 0A 31 39 34 32 2D 30 31 2D 30 33 09 72 65 69 6E 68 61 72 64 70 
+13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+49 00 00 10 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (73)
+01 38 05 54 72 75 64 65 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 20 
+54 65 73 74 20 37 0A 31 39 34 30 2D 31 31 2D 31 30 09 72 65 69 6E 68 61 72 64 
+70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+48 00 00 11 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (72)
+01 39 04 50 61 75 6C 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 69 6E 20 54 
+65 73 74 20 38 0A 31 39 36 30 2D 31 31 2D 30 38 09 72 65 69 6E 68 61 72 64 70 
+13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+4C 00 00 12 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (76)
+02 31 30 07 4D 61 6E 66 72 65 64 08 50 61 67 69 74 73 63 68 0E 6E 75 72 20 65 
+69 6E 20 54 65 73 74 20 39 0A 31 39 35 35 2D 31 30 2D 30 38 09 72 65 69 6E 68 
+61 72 64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+49 00 00 13 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (73)
+02 31 31 05 47 65 72 74 69 07 4D C3 BC 6C 6C 65 72 0E 6E 75 72 20 65 69 6E 20 
+54 65 73 74 20 39 0A 31 39 35 37 2D 31 30 2D 30 38 09 72 65 69 6E 68 61 72 64 
+70 13 32 30 32 32 2D 30 34 2D 30 37 20 31 35 3A 34 39 3A 32 38 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+40 00 00 14 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (64)
+02 31 32 05 4D 61 72 69 61 07 46 65 6C 6C 6E 65 72 05 48 61 6C 6C 6F 0A 31 39 
+33 35 2D 30 34 2D 30 37 09 72 65 69 6E 68 61 72 64 70 13 32 30 32 32 2D 30 34 
+2D 30 37 20 31 36 3A 31 35 3A 30 30 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+56 00 00 15 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (86)
+02 31 33 06 4D 61 72 74 68 61 06 4D 75 6C 6C 65 72 1B 48 61 6C 6C 6F 20 44 75 
+20 73 73 73 73 73 73 73 73 73 73 73 73 73 20 68 68 68 68 0A 31 39 36 36 2D 30 
+34 2D 30 37 09 72 65 69 6E 68 61 72 64 70 13 32 30 32 32 2D 30 34 2D 30 37 20 
+31 36 3A 32 32 3A 30 36 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+47 00 00 16 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (71)
+02 31 34 06 4D 61 72 74 69 6E 05 4D 61 69 65 72 0D 48 61 6C 6C 6F 20 4D 61 72 
+74 69 6E 21 0A 31 39 36 37 2D 30 34 2D 33 30 09 72 65 69 6E 68 61 72 64 70 13 
+32 30 32 32 2D 30 34 2D 30 37 20 31 36 3A 33 30 3A 33 37 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | >__cdecl cli_safe_read_with_ok
+| | | >vio_is_blocking
+| | | <vio_is_blocking
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | packet_header: Memory: 000002968D3CE340  Bytes: (4)
+07 00 00 17 
+| | | >net_read_raw_loop
+| | | | >__cdecl vio_ssl_read
+| | | | <__cdecl vio_ssl_read
+| | | <net_read_raw_loop
+| | | net read: Memory: 000002968D3CE340  Bytes: (7)
+FE 00 00 22 00 00 00 
+| | | >__cdecl cli_safe_read_with_ok_complete
+| | | <__cdecl cli_safe_read_with_ok_complete
+| | <__cdecl cli_safe_read_with_ok
+| | info: status: 34  warning_count: 0
+| | info: status: 34  warning_count:  0
+| | exit: Got 14 rows
+| <*__cdecl cli_read_rows
+| >MEM_ROOT::Clear
+| | enter: root: 000002968D3EBED0
+| <MEM_ROOT::Clear
+<*__cdecl mysql_store_result
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_fetch_row
+<mysql_fetch_row
+>mysql_free_result
+| enter: mysql_res: 000002968D40DE10
+| >MEM_ROOT::Clear
+| | enter: root: 000002968D3ECF50
+| <MEM_ROOT::Clear
+| >MEM_ROOT::Clear
+| | enter: root: 000002968D3EBED0
+| <MEM_ROOT::Clear
+<mysql_free_result
+>mysql_close
+| >free_old_query
+| | >MEM_ROOT::Clear
+| | | enter: root: 000002968D38ACE0
+| | <MEM_ROOT::Clear
+| <free_old_query
+| >vio_is_blocking
+| <vio_is_blocking
+| >cli_advanced_command
+| | >vio_is_blocking
+| | <vio_is_blocking
+| | >net_clear
+| | <net_clear
+| | >vio_is_blocking
+| | <vio_is_blocking
+| | >net_write_command
+| | | enter: length: 0
+| | | >net_write_buff
+| | | <net_write_buff
+| | | >net_write_buff
+| | | <net_write_buff
+| | | >net_flush
+| | | | >net_write_packet
+| | | | | >__cdecl vio_ssl_write
+| | | | | <__cdecl vio_ssl_write
+| | | | <net_write_packet
+| | | <net_flush
+| | <net_write_command
+| | exit: result: 0
+| <cli_advanced_command
+| >end_server
+| | info: Net: socket (840)
+| | >vio_ssl_shutdown
+| | | >vio_shutdown
+| | | <vio_shutdown
+| | <vio_ssl_shutdown
+| | >net_end
+| | <net_end
+| | >free_old_query
+| | | >MEM_ROOT::Clear
+| | | | enter: root: 000002968D38ACE0
+| | | <MEM_ROOT::Clear
+| | <free_old_query
+| <end_server
+| >mysql_extension_bind_free
+| <mysql_extension_bind_free
+| >mysql_close_free_options
+| | >mysql_ssl_free
+| | <mysql_ssl_free
+| <mysql_close_free_options
+| >mysql_detach_stmt_list
+| <mysql_detach_stmt_list
+<mysql_close
+>MEM_ROOT::Clear
+| enter: root: 00007FFBF68BBC10
+<MEM_ROOT::Clear

@@ -59,6 +59,7 @@ public:
 	int Init(HWND hWnd, HINSTANCE hinst);
 	bool CreateTable();
 	bool ResizeTable(HWND hWndstatus, HWND mainhWnd, int cParts);
+	bool ResizeTableA(HWND hWndstatus, HWND mainhWnd, int cParts);
 
 	bool CreateHeader();
 	bool CreateBody();
@@ -66,11 +67,14 @@ public:
 	bool CreateGridTable();
 	bool CreateGridHeader();
 	bool CreateGridBody();
+	bool CreateGridBodyA();
 
 	bool CreateOLeDBBody();
 
-	bool CreateMySQLDBBody(int rows, struct DATA *table);
+	bool CreateMySQLDBBody(int rows, struct DATA* table);
+	bool CreateMySQLDBBodyA(int rows, struct DATAA* table);
 	bool CreateMySQLDBBody();
+	bool CreateMySQLDBBodyA();
 
 
 	bool recalculateColumnwidth();

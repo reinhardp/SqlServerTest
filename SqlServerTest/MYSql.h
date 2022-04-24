@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 #include "defines.h"
 #include <mysql/jdbc.h>
@@ -19,12 +19,21 @@ protected:
     * All other
     *
     */
+#if USE_UNICODE == true
     WCHAR* m_host = NULL;
     WCHAR* m_port = NULL;
     WCHAR* m_user = NULL;
     WCHAR* m_password = NULL;
     WCHAR* m_database = NULL;
     WCHAR* m_table = NULL;
+#else
+    char* m_host = NULL;
+    char* m_port = NULL;
+    char* m_user = NULL;
+    char* m_password = NULL;
+    char* m_database = NULL;
+    char* m_table = NULL;
+#endif
     int m_lastID = 0;
     bool m_connected = false;
     bool m_updated = false;
@@ -32,7 +41,6 @@ protected:
     size_t m_retval = 0;
 
 private:
-    wchar_t m_errstring[512] = { 0 };
 
 
 public:
@@ -57,7 +65,10 @@ public:
     }
 
     void init(WCHAR *host, WCHAR *port, WCHAR *database, WCHAR *user, WCHAR *password);
+    void initA(char* host, char* port, char* database, char* user, char* password);
+
     bool connect();
+    bool connectA();
     
     void disconnect() {
         if (m_res) {
@@ -78,10 +89,15 @@ public:
         m_connected = false;
     }
 
-    bool select(WCHAR *query);
     bool select();
+    bool select(char* query);
+    bool select(int maxRows, int currentPage);
+
+    
     bool insert(WCHAR* firstname, WCHAR* lastname, WCHAR* birthday, WCHAR* dtext);
+    bool insertA(char* firstname, char* lastname, char* birthday, char* dtext);
     bool update(int id, WCHAR* firstname, WCHAR* lastname, WCHAR* birthday, WCHAR* dtext);
+    bool updateA(int id, char* firstname, char* lastname, char* birthday, char* dtext);
     bool deleteID(int id);
     
     int getLastID();
@@ -91,14 +107,6 @@ public:
     }
 
     bool setNames();
-
-    wchar_t* getErrString() {
-        return m_errstring;
-    }
-
-    void getErrString(wchar_t* errstring) {
-        errstring = m_errstring;
-    }
 
     bool hasError() {
         return m_hasError;

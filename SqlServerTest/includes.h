@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "framework.h"
 
 
@@ -7,8 +7,10 @@
  * 
  * will be used for test and real data
 */
-const TCHAR tHeader[6][30] = {L"Vorname", L"Nachname", L"Geburtstag", L"Text", L"Erstellt von", L"Erstellt am" };	// Table header, es gibt auch noch updated von und updated wan Spalten
+const TCHAR tHeader[8][30] = {L"Vorname", L"Nachname", L"Geburtstag", L"Text", L"Erstellt von", L"Erstellt am", L"Updated von", L"Updated am"};	// Table header, es gibt auch noch updated von und updated wan Spalten
 
+// will be used if 
+const TCHAR tuHeader[6][30] = { L"Vorname", L"Nachname", L"Geburtstag", L"Text", L"Updated von", L"Updated am" };
 
 /*
 * structure for the table 
@@ -25,6 +27,18 @@ struct DATA {
 	wchar_t updated_by[30];
 	wchar_t updated_at[24];
 } ;
+
+struct DATAA {
+	unsigned int ID;
+	char firstname[30];
+	char lastname[30];
+	char birthday[11];
+	char dtext[80000];
+	char created_by[30];
+	char created_at[24];
+	char updated_by[30];
+	char updated_at[24];
+};
 
 /*
  * Data for the Table for tests
@@ -44,3 +58,5 @@ static DATA rgtBody[] = {
 };
 
 static DATA* g_Body;
+static DATAA* g_BodyA;
+
